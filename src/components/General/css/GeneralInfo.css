@@ -1,0 +1,18 @@
+
+#difficulty-slider::-webkit-slider-thumb {
+  background-color: rgb(49, 196, 141);
+  border-radius: 25%;
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+#difficulty-slider::-webkit-slider-thumb:hover {
+  width: 23px;
+  height: 23px;
+};
+#difficulty-slider::-moz-range-thumb {
+  background-color: rgb(49, 196, 141);
+  border-radius: 25%;
+}
+#difficulty-slider::-ms-thumb {
+  background-color: rgb(49, 196, 141);
+  border-radius: 25%;
+}

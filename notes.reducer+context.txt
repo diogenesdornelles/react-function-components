@@ -1,0 +1,43 @@
+O react, ao implementar a lógica declarativa, lida com estados que são repassados aos componentes criados ao longo da Virtual DOM, segundo uma relação de pertinência (Context).
+
+Esses estados, dependendo do tamanho e natureza da aplicação, podem ser alçados a um grau elevado de complexidade, dificultando sobremaneira a implementação do código.
+
+Nessas hipóteses, pode ocorrer de os estados serem repassados, do pai, a diversos componentes filhos, os quais, inclusive, podem encontrar-se aninhados uns em níveis hierarquicamente inferiores a outros, e ainda assim sucessivamente. Tal circuntância normalmente é nominada de 'props drealling'. Pense o quão difícil seria passar um estado pertencente ao elemento pai a um filho que se encontra 10 níveis abaixo.
+
+Nesse cenário, surgem os hookies useContext e useReducer e o método createContext, todos do React.
+
+Como ponto de partida, o createContext provê um 'contexto de estados', que será utilizado pela aplicação globalmente, ou, melhor dizendo, globalmente no local em que estiver disponível.
+
+O primeiro passo é inicializar um objeto que contém todos os estados que serão partilhados entre elementos em diferentes níveis (Ver states folder).
+
+O segundo passo é criar a pasta de contextos e os arquivos que contém os scripts responsáveis pela inicialização dele.
+
+Para criar o contexto e disponibilizar pela app:
+export const GlobalGeneralContext = createContext();
+
+Agora, temos de pensar que nossos estados que integram o contexto sofrem alterações por intermédio de ações pré-determinadas pelo desenvolvedor, de acordo com alguma temática específica (salvar, carregar, alterar dado, etc). Essas ações passam por declaração (Ver folder actions).
+
+Ainda, após uma operação de modificação de estado ser acionada, a aplicação alterará os estados, por meio das actions, ou seja, pelo tipo de ação. As operações serão separadas através de uma função redutora, que contém um switch case. Isso simplificará toda a operacionalização do processo (ver reducers).
+
+Um elemento 'Provedor' (Provider) de contexto deve ser criado, onde tudo será reunido.Vejamos:
+
+import { globalGeneralState } from '../states/globalGeneralState';
+import { reducer } from '../reducers/generalReducer';
+export const GlobalGeneralContext = createContext();
+
+export const GeneralContext = ({ children }) => {
+  const [contextGeneralState, dispatchGeneralState] = useReducer(
+    reducer,
+    globalGeneralState,
+  );
+  useSaveState('contextGeneralState', contextGeneralState);
+  return (
+    <GlobalGeneralContext.Provider
+      value={{ contextGeneralState, dispatchGeneralState }}
+    >
+      {children}
+    </GlobalGeneralContext.Provider>
+  );
+};
+
+
